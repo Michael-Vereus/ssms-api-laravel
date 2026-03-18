@@ -12,7 +12,7 @@ function test(): JsonResponse{
     ]);
 }
 
-Route::get('/test', function(){
-    return test();
-});
-Route::get('/test-api',[ItemController::class, 'test']);
+Route::get('/test', function(){return test();});
+Route::get('/item/test',[ItemController::class, 'test']);
+Route::get('/item/all',[ItemController::class, 'fetchAll']);
+Route::post('/item/send',[ItemController::class, 'createItem']);

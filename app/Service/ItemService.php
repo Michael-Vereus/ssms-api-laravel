@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Service;
-use function PHPUnit\Framework\returnArgument;
+use App\Models\ItemEntity;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
-class ItemService {
+class ItemService extends BaseService{
     protected $db;
     public function __construct() {
         // This gives you the underlying PDO instance if you really need it
@@ -18,6 +19,19 @@ class ItemService {
             "sqlite_ver"=> $version
         ];
     }
+    public function getAll(){
+        $itemFetched = [];
+        try {
+            $itemFetched = ItemEntity::all()->toArray();
+        } catch (Exception $e) {
+            $itemFetched = $this->handleExcept($e);
+        }
+        return $this->arrReturn(
+            $this->isArr($itemFetched),
+            $itemFetched
+        );
+    }
+    
 }
 
 ?>

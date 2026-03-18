@@ -19,6 +19,18 @@ class ItemController extends Controller {
     private function returnInJson(array $toJson): JsonResponse{
         return response()->json($toJson);
     }
+    public function fetchAll(): JsonResponse {
+        return response()->json($this->itemServ->getAll());
+    }
+    /*public function createItem(): JsonResponse{
+        
+    }
+    
+    private function toJsonArr(array $arr){
+        
+    }
+
+    /*
     public function store(Request $request)
     {
         //
@@ -26,15 +38,15 @@ class ItemController extends Controller {
 
     /**
      * Display the specified resource.
-     */
+     */ /*
     public function show(string $id)
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
-     */
+     */ /*
     public function update(Request $request, string $id)
     {
         //
@@ -42,9 +54,10 @@ class ItemController extends Controller {
 
     /**
      * Remove the specified resource from storage.
-     */
+     */ /*
     public function destroy(string $id)
     {
         //
-    }
+    } */
+    
 }
