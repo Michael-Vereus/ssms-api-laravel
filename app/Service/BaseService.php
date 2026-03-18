@@ -4,27 +4,22 @@ namespace App\Service;
 use Exception;
 
 abstract class BaseService{
-    public function arrReturn(bool $status, ?array $data){
+
+    protected function arrReturn(bool $status, ?array $data = null){
         return [
             "status"=>$status,
             "debug_msg"=>$this->isTrue($status),
-            "data"=> $data ?? ["msg"=>"empty"]
+            "data"=> $data ?? ["msg"=>"if empty ignore"]
         ];
     }
-    public function isArr(array $arr){
+    protected function isArr(array $arr){
         if(is_array($arr)){return true;} return false;
     }
-    public function isTrue(bool $bool){
+    protected function isTrue(bool $bool){
         if($bool){
             return "request_completed";
         }
         return "request_err";
-    }
-    public function handleExcept(Exception $e){
-        return [
-            "msg"=>"db_err", 
-            "err"=> $e->getMessage()
-        ];
     }
 }
 

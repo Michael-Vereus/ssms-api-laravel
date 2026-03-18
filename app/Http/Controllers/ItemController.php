@@ -16,14 +16,19 @@ class ItemController extends Controller {
     public function test() {
         return $this->returnInJson($this->itemServ->test());
     }
-    private function returnInJson(array $toJson): JsonResponse{
-        return response()->json($toJson);
-    }
     public function fetchAll(): JsonResponse {
-        return response()->json($this->itemServ->getAll());
+        return $this->returnInJson($this->itemServ->getAll());
+    }
+    public function push(Request $request): JsonResponse {
+        //to check if this key exist in json 
+        $request->validate([
+            'itemPrice'   => 'required|int',
+            'itemName' => 'required|string',
+        ]);
+        return $this->returnInJson($this->itemServ->insertion($request));
     }
     /*public function createItem(): JsonResponse{
-        
+        return   
     }
     
     private function toJsonArr(array $arr){
@@ -59,5 +64,8 @@ class ItemController extends Controller {
     {
         //
     } */
+    private function returnInJson(array $toJson): JsonResponse{
+        return response()->json($toJson);
+    }
     
 }

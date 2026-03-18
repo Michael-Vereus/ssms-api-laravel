@@ -1,34 +1,39 @@
 <?php
 
 namespace App\Service;
+
 use App\Models\ItemEntity;
-use Exception;
+use App\Repositories\ItemRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ItemService extends BaseService{
-    protected $db;
+    protected ItemRepository $itemRepo ;
     public function __construct() {
-        // This gives you the underlying PDO instance if you really need it
-        $this->db = DB::connection()->getPdo();
+        $this->itemRepo = new ItemRepository();
     }
     public function test(): array{
-        $query = $this->db->query("SELECT sqlite_version()");
-        $version = $query->fetchColumn();
-        return [
-            "msg"=>"Item API is running",
-            "sqlite_ver"=> $version
-        ];
+        return $this->itemRepo->test();
     }
-    public function getAll(){
-        $itemFetched = [];
-        try {
-            $itemFetched = ItemEntity::all()->toArray();
-        } catch (Exception $e) {
-            $itemFetched = $this->handleExcept($e);
-        }
+    public function getAll(): array{
+        $all = $this->itemRepo->fetchAll();
+
         return $this->arrReturn(
-            $this->isArr($itemFetched),
-            $itemFetched
+            $this->isArr($all),
+            $all
+        );
+    }
+    public function insertion(Request $request): array{
+        $data = $request->only(['itemId' , 'itemName', 'itemPrice']);
+        
+        $newItem = ItemEntity::makeNew(
+            $data['itemId'] ?? null,
+            $data['itemName'],
+            $data['itemPrice']
+        );
+        $status = $this->itemRepo->insertUno($newItem);
+        return $this->arrReturn(
+            $status
         );
     }
     

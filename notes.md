@@ -9,3 +9,12 @@ Patch 3.18.10.40 :
 - Added a base service to inherit common functions to other service that will use it.
 - Migrate all of the common / helper function to BaseService.php for better readability and traceblitiy
 - Another reminder to ignore the repository layer for the mean time till i could get a better use of it.
+
+Patch 3.18.18.58 : 
+- Added a new feature to handle item insertion within the inventory module.
+- Implemented a validation check to ensure all required JSON keys are present before processing.
+- Refactored the architecture by moving all database interactions from the Service into the Repository.
+- Updated the Service layer to focus on business logic and standardizing the arrays returned to the Controller.
+- Introduced a BaseRepository to house common helper functions used across the application.
+- Added a $defaultStatus attribute and a handleExcept method to the Base Repository for consistent error handling.
+- Ensured a cleaner separation of concerns by limiting the Service's role to data preparation and the Repository's role to database execution.

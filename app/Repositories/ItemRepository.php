@@ -3,12 +3,34 @@
 namespace App\Repositories;
 
 use App\Models\ItemEntity;
-use Illuminate\Database\Eloquent\Collection;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
-class ItemRepository {
-    public function getAll(): Collection {
-        return ItemEntity::all();
+class ItemRepository extends BaseRepository{
+    
+    public function __construct() {
+        // to get pdo instance
+        $this->db = DB::connection()->getPdo();
     }
+    public function fetchAll(): array {
+        $itemFetched = [];
+        try {
+            $itemFetched = ItemEntity::all()->toArray();
+        } catch (Exception $e) {
+            $itemFetched = $this->handleExcept($e);
+        }
+        return $itemFetched;
+    }
+    public function insertUno(ItemEntity $newItem): bool {
+        $status = $this->defaultStatus;
+        try {
+            $status = $newItem->save();
+        } catch (Exception $e) {
+            $status;
+        }
+        return $status;
+    }
+    // public fun
 }
 
 
