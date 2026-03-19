@@ -23,3 +23,7 @@ Patch 3.19.12.27 :
 - Added feature for updating item.
 - Added private helper (requestToArray and createItemEntity) for easier readability and simpiclity.
 - Added request validation to check necessary key needed
+
+Patch 3.19.16.45 : 
+- Added feature for deleting items permanently, will add a ways to soft delete in the future
+- In progress adding a function to search by name ( commented )

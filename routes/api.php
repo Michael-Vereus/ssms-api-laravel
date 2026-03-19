@@ -17,3 +17,4 @@ Route::get('/item/test',[ItemController::class, 'test']);
 Route::get('/item/all',[ItemController::class, 'fetchAll']);
 Route::post('/item/push',[ItemController::class, 'push']);
 Route::put('/item/edit',[ItemController::class,'patch']);
+Route::delete('/item/remove',[ItemController::class,'remove']);

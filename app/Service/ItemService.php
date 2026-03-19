@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Interface\IService;
 use App\Models\ItemEntity;
 use App\Repositories\ItemRepository;
 use Illuminate\Http\Request;
@@ -23,6 +24,11 @@ class ItemService extends BaseService{
             $all
         );
     }
+    // public function searchByName(Request $request): array{
+    //     $search = $request->itemName;
+
+
+    // }
     public function insertion(Request $request): array{
         $data = $this->requestToArray($request);
         
@@ -37,6 +43,13 @@ class ItemService extends BaseService{
 
         $uptItem = $this->createItemEntity($data);
         $status = $this->itemRepo->updateUno($uptItem, $data['itemId']);
+        return $this->arrReturn(
+            $status
+        );
+    }
+    public function remove(Request $request): array{
+        $id = $request->itemId;
+        $status = $this->itemRepo->destroy($id);
         return $this->arrReturn(
             $status
         );

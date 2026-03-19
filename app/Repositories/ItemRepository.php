@@ -45,7 +45,26 @@ class ItemRepository extends BaseRepository{
             }
         }
         return $status;
-    } 
+    }
+    public function destroy(array $itemId): bool{
+        $status = $this->defaultStatus;
+        try {
+            ItemEntity::destroy($itemId);
+            $status = true;
+        } catch (Exception $e) {
+            $status;
+        }
+        return $status;
+    }
+    public function search(): bool{
+        $status = $this->defaultStatus;
+        try {
+            
+        } catch (\Throwable $th) {
+            
+        }
+        return $status;
+    }
 }
 
 

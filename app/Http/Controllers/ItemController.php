@@ -34,6 +34,12 @@ class ItemController extends Controller {
         ]);
         return $this->returnInJson($this->itemServ->update($request));
     }
+    public function remove(Request $request): JsonResponse{
+        $request->validate([
+            'itemId'=>'required|array'
+        ]);
+        return $this->returnInJson($this->itemServ->remove($request));
+    }
     /*public function createItem(): JsonResponse{
         return   
     }
