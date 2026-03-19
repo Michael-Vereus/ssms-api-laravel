@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ItemEntity;
+use Arr;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +31,21 @@ class ItemRepository extends BaseRepository{
         }
         return $status;
     }
-    // public fun
+
+    public function updateUno(ItemEntity $newItem, string $itemId): bool{
+        $status = $this->defaultStatus;
+        $id = $newItem->itemId;
+        $search_item = ItemEntity::find($id);
+        if($search_item){
+            try {
+                $newItem->exists = true;
+                $status = $newItem->save();
+            } catch (Exception $e) {
+                $status;
+            }
+        }
+        return $status;
+    } 
 }
 
 

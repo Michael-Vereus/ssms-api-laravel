@@ -18,3 +18,8 @@ Patch 3.18.18.58 :
 - Introduced a BaseRepository to house common helper functions used across the application.
 - Added a $defaultStatus attribute and a handleExcept method to the Base Repository for consistent error handling.
 - Ensured a cleaner separation of concerns by limiting the Service's role to data preparation and the Repository's role to database execution.
+
+Patch 3.19.12.27 : 
+- Added feature for updating item.
+- Added private helper (requestToArray and createItemEntity) for easier readability and simpiclity.
+- Added request validation to check necessary key needed

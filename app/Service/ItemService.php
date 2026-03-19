@@ -24,16 +24,37 @@ class ItemService extends BaseService{
         );
     }
     public function insertion(Request $request): array{
-        $data = $request->only(['itemId' , 'itemName', 'itemPrice']);
+        $data = $this->requestToArray($request);
         
-        $newItem = ItemEntity::makeNew(
-            $data['itemId'] ?? null,
-            $data['itemName'],
-            $data['itemPrice']
-        );
+        $newItem = $this->createItemEntity($data);
         $status = $this->itemRepo->insertUno($newItem);
         return $this->arrReturn(
             $status
+        );
+    }
+    public function update(Request $request): array{
+        $data = $this->requestToArray($request);
+
+        $uptItem = $this->createItemEntity($data);
+        $status = $this->itemRepo->updateUno($uptItem, $data['itemId']);
+        return $this->arrReturn(
+            $status
+        );
+    }
+
+    // helper class
+    private function requestToArray(Request $request): array{
+        return $request->only([
+            'itemId' , 
+            'itemName', 
+            'itemPrice'
+        ]);
+    }
+    private function createItemEntity(array $data): ItemEntity{
+        return ItemEntity::makeNew(
+            $data['itemId'] ?? null,
+            $data['itemName'],
+            $data['itemPrice']
         );
     }
     

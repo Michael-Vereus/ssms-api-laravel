@@ -22,10 +22,17 @@ class ItemController extends Controller {
     public function push(Request $request): JsonResponse {
         //to check if this key exist in json 
         $request->validate([
-            'itemPrice'   => 'required|int',
+            'itemPrice'   => 'required|integer',
             'itemName' => 'required|string',
         ]);
         return $this->returnInJson($this->itemServ->insertion($request));
+    }
+    public function patch(Request $request): JsonResponse{
+        $request->validate([
+            'itemPrice'   => 'required|integer',
+            'itemName' => 'required|string',
+        ]);
+        return $this->returnInJson($this->itemServ->update($request));
     }
     /*public function createItem(): JsonResponse{
         return   
