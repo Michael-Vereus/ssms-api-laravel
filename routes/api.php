@@ -5,6 +5,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
+use function Laravel\Prompts\search;
 
 function test(): JsonResponse{
     return response()->json([
@@ -15,6 +16,7 @@ function test(): JsonResponse{
 Route::get('/test', function(){return test();});
 Route::get('/item/test',[ItemController::class, 'test']);
 Route::get('/item/all',[ItemController::class, 'fetchAll']);
+Route::get('/item/search/{item_name}',[ItemController::class, 'search']);
 Route::post('/item/push',[ItemController::class, 'push']);
 Route::put('/item/edit',[ItemController::class,'patch']);
 Route::delete('/item/remove',[ItemController::class,'remove']);

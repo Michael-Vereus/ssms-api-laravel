@@ -27,3 +27,13 @@ Patch 3.19.12.27 :
 Patch 3.19.16.45 : 
 - Added feature for deleting items permanently, will add a ways to soft delete in the future
 - In progress adding a function to search by name ( commented )
+
+Patch 3.20.09.54 : 
+- Added feature to searchByName in ItemService
+- Added DTOs directory to store the DTO class.
+- Added checking in insertion function in ItemService to check if an itemPrice is less than equals 0. To prevent invalid pricing.
+- Added checking in findByName function in Item Service to check if a search query char len is greater than or equals 3
+- Changed functions in ItemService to accept ItemDTO in their param and changed the logic aswell
+- Refactored Item module by Using ItemDTO to when storing and updating items. Also changed the param in remove and search items to itemId and itemName instead of the old Request object. This changes is done to have a better readability of the code itself. 
+- Removed helper function ( requestToArray ) in ItemService, since it will no longer need that. 
+- Fixed helper function ( createItemEntity ) in its param so it could turn ItemDTO to a new ItemEntity

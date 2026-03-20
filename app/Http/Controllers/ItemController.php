@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ItemDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Service\ItemService;
@@ -25,20 +26,26 @@ class ItemController extends Controller {
             'itemPrice'   => 'required|integer',
             'itemName' => 'required|string',
         ]);
-        return $this->returnInJson($this->itemServ->insertion($request));
+        $newItem = ItemDTO::fromRequest($request);
+        return $this->returnInJson($this->itemServ->insertion($newItem));
     }
     public function patch(Request $request): JsonResponse{
         $request->validate([
             'itemPrice'   => 'required|integer',
             'itemName' => 'required|string',
         ]);
-        return $this->returnInJson($this->itemServ->update($request));
+        $updtItem = ItemDTO::fromRequest($request);
+        return $this->returnInJson($this->itemServ->update($updtItem));
     }
     public function remove(Request $request): JsonResponse{
         $request->validate([
             'itemId'=>'required|array'
         ]);
-        return $this->returnInJson($this->itemServ->remove($request));
+        $ids = $request->itemId;
+        return $this->returnInJson($this->itemServ->destroy($ids));
+    }
+    public function search(string $item_name): JsonResponse{
+        return $this->returnInJson($this->itemServ->findItemByName($item_name));
     }
     /*public function createItem(): JsonResponse{
         return   

@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
+use App\DTOs\ItemDTO;
 use App\Interface\IService;
 use App\Models\ItemEntity;
 use App\Repositories\ItemRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ItemService extends BaseService{
     protected ItemRepository $itemRepo ;
@@ -24,50 +24,67 @@ class ItemService extends BaseService{
             $all
         );
     }
-    // public function searchByName(Request $request): array{
-    //     $search = $request->itemName;
+    
+    public function findItemByName(string $item_name): array{
+        if(!$item_name || strlen($item_name) < 3){
+            return $this->arrReturn(
+                false,
+                ["Enter at least 3 characters to search"]
+            );
+        }
 
+        $data = $this->itemRepo->queryByName($item_name);
 
-    // }
-    public function insertion(Request $request): array{
-        $data = $this->requestToArray($request);
-        
-        $newItem = $this->createItemEntity($data);
+        return $this->arrReturn(
+            $this->isArr($data),
+            $data
+        );
+    }
+    
+    public function insertion(ItemDTO $dto): array{
+        if($dto->itemPrice <= 0){
+            return $this->arrReturn(
+                false,
+                ["Invalid Item Price"]
+            );
+        }
+        $newItem = $this->createItemEntity($dto);
         $status = $this->itemRepo->insertUno($newItem);
-        return $this->arrReturn(
-            $status
-        );
-    }
-    public function update(Request $request): array{
-        $data = $this->requestToArray($request);
 
-        $uptItem = $this->createItemEntity($data);
-        $status = $this->itemRepo->updateUno($uptItem, $data['itemId']);
         return $this->arrReturn(
             $status
         );
     }
-    public function remove(Request $request): array{
-        $id = $request->itemId;
-        $status = $this->itemRepo->destroy($id);
+    public function update(ItemDTO $dto): array{
+
+        $uptItem = $this->createItemEntity($dto);
+        $status = $this->itemRepo->updateUno($uptItem);
+    
+        return $this->arrReturn(
+            $status
+        );
+    }
+    public function destroy(array $deleteIds): array{
+        $status = $this->itemRepo->deleteById($deleteIds);
+        
         return $this->arrReturn(
             $status
         );
     }
 
     // helper class
-    private function requestToArray(Request $request): array{
-        return $request->only([
-            'itemId' , 
-            'itemName', 
-            'itemPrice'
-        ]);
-    }
-    private function createItemEntity(array $data): ItemEntity{
+    // private function requestToArray(Request $request): array{
+    //     return $request->only([
+    //         'itemId' , 
+    //         'itemName', 
+    //         'itemPrice'
+    //     ]);
+    // }
+    private function createItemEntity(ItemDTO $dto): ItemEntity{
         return ItemEntity::makeNew(
-            $data['itemId'] ?? null,
-            $data['itemName'],
-            $data['itemPrice']
+            $dto->itemId,
+            $dto->itemName,
+            $dto->itemPrice
         );
     }
     

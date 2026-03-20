@@ -32,7 +32,7 @@ class ItemRepository extends BaseRepository{
         return $status;
     }
 
-    public function updateUno(ItemEntity $newItem, string $itemId): bool{
+    public function updateUno(ItemEntity $newItem): bool{
         $status = $this->defaultStatus;
         $id = $newItem->itemId;
         $search_item = ItemEntity::find($id);
@@ -46,7 +46,7 @@ class ItemRepository extends BaseRepository{
         }
         return $status;
     }
-    public function destroy(array $itemId): bool{
+    public function deleteById(array $itemId): bool{
         $status = $this->defaultStatus;
         try {
             ItemEntity::destroy($itemId);
@@ -56,14 +56,17 @@ class ItemRepository extends BaseRepository{
         }
         return $status;
     }
-    public function search(): bool{
-        $status = $this->defaultStatus;
+    public function queryByName(string $name): array{
+        $searchResult = [];
         try {
-            
-        } catch (\Throwable $th) {
-            
+            $searchResult =  ItemEntity::whereRaw(
+                'LOWER(itemName) LIKE ?', 
+                ['%' . strtolower($name) . '%']
+            )->get()->toArray();
+        } catch (Exception $e) {
+            $searchResult;
         }
-        return $status;
+        return $searchResult;
     }
 }
 
