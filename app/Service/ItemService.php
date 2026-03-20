@@ -3,10 +3,8 @@
 namespace App\Service;
 
 use App\DTOs\ItemDTO;
-use App\Interface\IService;
 use App\Models\ItemEntity;
 use App\Repositories\ItemRepository;
-use Illuminate\Http\Request;
 
 class ItemService extends BaseService{
     protected ItemRepository $itemRepo ;
@@ -66,7 +64,7 @@ class ItemService extends BaseService{
     }
     public function destroy(array $deleteIds): array{
         $status = $this->itemRepo->deleteById($deleteIds);
-        
+
         return $this->arrReturn(
             $status
         );

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Http\Controllers\BinController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\JsonResponse;
@@ -20,3 +21,6 @@ Route::get('/item/search/{item_name}',[ItemController::class, 'search']);
 Route::post('/item/push',[ItemController::class, 'push']);
 Route::put('/item/edit',[ItemController::class,'patch']);
 Route::delete('/item/remove',[ItemController::class,'remove']);
+
+Route::get('/bin/test',[BinController::class,'test']);
+Route::get('/bin/all',[BinController::class, 'fetchAll']);

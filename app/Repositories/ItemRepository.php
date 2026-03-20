@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 
 class ItemRepository extends BaseRepository{
+    protected $db;
     
     public function __construct() {
         // to get pdo instance

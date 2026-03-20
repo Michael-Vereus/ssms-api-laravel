@@ -37,3 +37,10 @@ Patch 3.20.09.54 :
 - Refactored Item module by Using ItemDTO to when storing and updating items. Also changed the param in remove and search items to itemId and itemName instead of the old Request object. This changes is done to have a better readability of the code itself. 
 - Removed helper function ( requestToArray ) in ItemService, since it will no longer need that. 
 - Fixed helper function ( createItemEntity ) in its param so it could turn ItemDTO to a new ItemEntity
+
+Patch 3.20.19.14 : 
+- Started work on Bin module, added the base work a.k.a the controller, service, repository and model.
+- Created bin table and its migration schema
+- Realized that ive created duplicated schema but didnt use the other entity. Will delete the other schema and the duplicated bin table( bin tables and entity )
+- Removed some unecessary 'use' inside itemService
+- Removed TestController.php since its not being used anymore
