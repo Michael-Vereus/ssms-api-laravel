@@ -44,3 +44,9 @@ Patch 3.20.19.14 :
 - Realized that ive created duplicated schema but didnt use the other entity. Will delete the other schema and the duplicated bin table( bin tables and entity )
 - Removed some unecessary 'use' inside itemService
 - Removed TestController.php since its not being used anymore
+
+Patch 3.20.23.28 : 
+- Added attributes in BinEntity also added makeNew function and calculateId to generate random id.
+- Moved returnInJson function to Controller since its a common function / helper function
+- Added function arrForTest() to return array for testing
+- Started working on fetchAll feature in Bin module

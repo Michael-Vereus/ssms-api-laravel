@@ -84,8 +84,4 @@ class ItemController extends Controller {
     {
         //
     } */
-    private function returnInJson(array $toJson): JsonResponse{
-        return response()->json($toJson);
-    }
-    
 }
