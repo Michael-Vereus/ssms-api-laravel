@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class BinEntity extends Model
 {
-    protected $table = 'bin';//
+    protected $table = 'bins';//
     protected $primaryKey = 'binId';
-    private $incrementing = false;
+    public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
         'binId',
@@ -24,7 +24,7 @@ class BinEntity extends Model
         return $bin;
     }
     public static function calculateId(): string{
-        $itemId = bin2hex(random_bytes(3));
-        return $itemId;
+        $binId = bin2hex(random_bytes(3));
+        return $binId;
     }
 }

@@ -50,3 +50,12 @@ Patch 3.20.23.28 :
 - Moved returnInJson function to Controller since its a common function / helper function
 - Added function arrForTest() to return array for testing
 - Started working on fetchAll feature in Bin module
+
+Patch 3.21.12.06 : 
+- Added BinDTO for bin module.
+- Finished laying the foundation for Bin Module will add the CRUD Feature later on.
+
+Patch 3.21.15.00 : 
+- Fixed a bug when inserting items. Changes made in each DTO where a null is converted into an empty string. Causing BinEntity id generation wont trigger. 
+- Added Create (C) feature in Bin Module
+- Fixed typo variable naming in BinEntity->calculateId()
