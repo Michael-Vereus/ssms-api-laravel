@@ -16,58 +16,78 @@ class ItemRepository extends BaseRepository{
     }
     public function fetchAll(): array {
         $itemFetched = [];
+        $err_msg = $this->defaultErr;
         try {
             $itemFetched = ItemEntity::all()->toArray();
         } catch (Exception $e) {
-            $itemFetched = $this->handleExcept($e);
+            $err_msg = $this->$e->getMessage();
         }
-        return $itemFetched;
+        return $this->handleReturnArr(
+            $itemFetched,
+            $err_msg
+        );
     }
-    public function insertUno(ItemEntity $newItem): bool {
+    public function insertUno(ItemEntity $newItem): array {
         $status = $this->defaultStatus;
+        $err_msg = $this->defaultErr;
         try {
             $status = $newItem->save();
         } catch (Exception $e) {
-            $status;
+            $err_msg = $e->getMessage();
         }
-        return $status;
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
     }
 
-    public function updateUno(ItemEntity $newItem): bool{
+    public function updateUno(ItemEntity $newItem): array{
         $status = $this->defaultStatus;
         $id = $newItem->itemId;
+        $err_msg = $this->defaultErr;
         $search_item = ItemEntity::find($id);
         if($search_item){
             try {
                 $newItem->exists = true;
                 $status = $newItem->save();
             } catch (Exception $e) {
-                $status;
+                $err_msg = $e->getMessage();
             }
         }
-        return $status;
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
     }
-    public function deleteById(array $itemId): bool{
+    public function deleteById(array $itemId): array{
         $status = $this->defaultStatus;
+        $err_msg = $this->defaultErr;
         try {
             ItemEntity::destroy($itemId);
             $status = true;
         } catch (Exception $e) {
-            $status;
+            $err_msg = $e->getMessage();
         }
-        return $status;
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
     }
     public function queryByName(string $name): array{
         $searchResult = [];
+        $err_msg = $this->defaultErr;
         try {
             $searchResult =  ItemEntity::whereRaw(
                 'LOWER(itemName) LIKE ?', 
                 ['%' . strtolower($name) . '%']
             )->get()->toArray();
         } catch (Exception $e) {
-            $searchResult;
+            $err_msg = $e->getMessage();
         }
-        return $searchResult;
+        return $this->handleReturnArr(
+            $searchResult,
+            $err_msg
+        );
     }
 }
 

@@ -25,8 +25,14 @@ class BinController extends Controller {
             'binCap'=>'required|integer'
         ]);
         $newBin = BinDTO::fromRequest($request);
-        // return $this->returnInJson(["msg"=>$newBin]);
         return $this->returnInJson($this->binServ->insertion($newBin));
+    }
+    public function remove(Request $request):JsonResponse{
+        $request->validate([
+            "binId"=>'required|array'
+        ]);
+        $ids = $request->binId;
+        return $this->returnInJson($this->binServ->destroy($ids));
     }
 
 }

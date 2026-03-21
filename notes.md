@@ -59,3 +59,10 @@ Patch 3.21.15.00 :
 - Fixed a bug when inserting items. Changes made in each DTO where a null is converted into an empty string. Causing BinEntity id generation wont trigger. 
 - Added Create (C) feature in Bin Module
 - Fixed typo variable naming in BinEntity->calculateId()
+
+Patch 3.21.22.52 : 
+- Added deleteById feature in Bin
+- Done big haul on repository, by standardizing all return should be array. 
+- Added helper function handleReturnArr in handle repository for consitency
+- Refactored all of service module bin and items.
+- Added debug_err key in arrReturn to know if there are any errors inside the code.

@@ -12,8 +12,9 @@ readonly class ItemDTO{
     ){}
 
     public static function fromRequest(Request $request):self{
+        $itemId = $request->input('itemId');
         return new self(
-            itemId : (string) $request->input('itemId'),
+            itemId : is_null($itemId) ? null :(string) $itemId,
             itemName : (string) $request->input('itemName'),
             itemPrice : (int) $request->input('itemPrice')
         );

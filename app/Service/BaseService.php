@@ -5,10 +5,11 @@ use Exception;
 
 abstract class BaseService{
 
-    protected function arrReturn(bool $status, ?array $data = null){
+    protected function arrReturn(bool $status, string $err_msg, ?array $data = null){
         return [
             "status"=>$status,
             "debug_msg"=>$this->isTrue($status),
+            "err_msg"=> $err_msg,
             "data"=> $data ?? ["msg"=>"if empty ignore"]
         ];
     }

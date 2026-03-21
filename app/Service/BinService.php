@@ -16,23 +16,25 @@ class BinService extends BaseService {
         $data = $this->binRepo->test();
         return $this->arrReturn(
             true,
-            $data
+            $data['debug_err'],
+            $data['result']
         );
     }
     public function fetchAll(): array{
         $data = $this->binRepo->all();
         return $this->arrReturn(
-            $this->isArr($data),
-            $data
+            true,
+            $data['debug_err'],
+            $data['result']
         );
     }
     public function insertion(BinDTO $binDTO): array{
         $newBin = $this->createBinEntity($binDTO);
 
-        return [$newBin];
-        $status = $this->binRepo->insertUno($newBin);
+        $data = $this->binRepo->insertUno($newBin);
         return $this->arrReturn(
-            $status
+            $data['result'],
+            $data['debug_err'],
         );
     }
     public function createBinEntity(BinDTO $dto): BinEntity{
@@ -40,6 +42,14 @@ class BinService extends BaseService {
             $dto->binId,
             $dto->binName,
             $dto->binCap
+        );
+    }
+    public function destroy(array $deleteIds): array{
+        $data = $this->binRepo->deleteById($deleteIds);
+
+        return $this->arrReturn(
+            $data['result'],
+            $data['debug_err']
         );
     }
 }

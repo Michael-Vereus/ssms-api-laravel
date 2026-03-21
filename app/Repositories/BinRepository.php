@@ -11,18 +11,49 @@ class BinRepository extends BaseRepository{
         $this->db = DB::connection()->getPdo();
     }
     public function all(): array{
-        $result = BinEntity::all()->toArray();
-        return $result;
+        $result = [];
+        $err_msg = $this->defaultErr;
+        try {
+            $result = BinEntity::all()->toArray();    
+        } catch (Exception $e) {
+            $err_msg = $e->getMessage();
+        }
+        
+        return $this->handleReturnArr(
+            $result,
+            $err_msg
+        );
     }
-    public function insertUno(BinEntity $newBin): bool{
-        $status = false;
+    public function insertUno(BinEntity $newBin): array{
+        $status = $this->defaultStatus;
+        $err_msg = $this->defaultErr;
         try {
             $status = $newBin->save();
         } catch (Exception $e) {
-            $status = $this->defaultStatus;
+            $err_msg = $e->getMessage();
         }
-        return $status;
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
     }
+    public function deleteById(array $binId): array{
+        $status = $this->defaultStatus;
+        $err_msg = null;
+        try {
+            BinEntity::destroy($binId);
+            $status = $this->successStatus;
+        } catch (Exception $e) {
+            $err_msg = $e->getMessage();
+        }
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
+    }
+    // public function updateUno(BinEntity $updtBin):array{
+
+    // }
 }
 
 ?>

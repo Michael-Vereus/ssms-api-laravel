@@ -15,11 +15,12 @@ class ItemService extends BaseService{
         return $this->itemRepo->test();
     }
     public function getAll(): array{
-        $all = $this->itemRepo->fetchAll();
+        $data = $this->itemRepo->fetchAll();
 
         return $this->arrReturn(
-            $this->isArr($all),
-            $all
+            true,
+            $data['debug_err'],
+            $data['result']
         );
     }
     
@@ -27,15 +28,16 @@ class ItemService extends BaseService{
         if(!$item_name || strlen($item_name) < 3){
             return $this->arrReturn(
                 false,
-                ["Enter at least 3 characters to search"]
+                "Enter at least 3 characters to search"
             );
         }
 
         $data = $this->itemRepo->queryByName($item_name);
 
         return $this->arrReturn(
-            $this->isArr($data),
-            $data
+            true,
+            $data['debug_err'],
+            $data['result'] 
         );
     }
     
@@ -43,30 +45,33 @@ class ItemService extends BaseService{
         if($dto->itemPrice <= 0){
             return $this->arrReturn(
                 false,
-                ["Invalid Item Price"]
+                "Invalid Item Price"
             );
         }
         $newItem = $this->createItemEntity($dto);
-        $status = $this->itemRepo->insertUno($newItem);
+        $data = $this->itemRepo->insertUno($newItem);['result'];
 
         return $this->arrReturn(
-            $status
+            $data['result'],
+            $data['debug_err']
         );
     }
     public function update(ItemDTO $dto): array{
 
         $uptItem = $this->createItemEntity($dto);
-        $status = $this->itemRepo->updateUno($uptItem);
-    
+        $data = $this->itemRepo->updateUno($uptItem);
+        
         return $this->arrReturn(
-            $status
+            $data['result'],
+            $data['debug_err']
         );
     }
     public function destroy(array $deleteIds): array{
-        $status = $this->itemRepo->deleteById($deleteIds);
+        $data = $this->itemRepo->deleteById($deleteIds);
 
         return $this->arrReturn(
-            $status
+            $data['result'],
+            $data['debug_err']
         );
     }
 
