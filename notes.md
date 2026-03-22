@@ -66,3 +66,6 @@ Patch 3.21.22.52 :
 - Added helper function handleReturnArr in handle repository for consitency
 - Refactored all of service module bin and items.
 - Added debug_err key in arrReturn to know if there are any errors inside the code.
+
+Patch 3.22.08.01 : 
+- Fixed a bug inside delete function in Bin Repo

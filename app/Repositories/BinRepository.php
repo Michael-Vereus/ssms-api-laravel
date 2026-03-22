@@ -39,7 +39,7 @@ class BinRepository extends BaseRepository{
     }
     public function deleteById(array $binId): array{
         $status = $this->defaultStatus;
-        $err_msg = null;
+        $err_msg = $this->defaultErr;
         try {
             BinEntity::destroy($binId);
             $status = $this->successStatus;
