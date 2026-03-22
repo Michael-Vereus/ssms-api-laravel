@@ -27,4 +27,5 @@ Route::delete('/item/remove',[ItemController::class,'remove']);
 Route::get('/bin/test',[BinController::class,'test']);
 Route::get('/bin/all',[BinController::class, 'fetchAll']);
 Route::post('/bin/push',[BinController::class, 'push']);
+Route::put('bin/edit',[BinController::class, 'patch']);
 Route::delete('/bin/remove',[BinController::class,'remove']);

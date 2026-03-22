@@ -34,5 +34,14 @@ class BinController extends Controller {
         $ids = $request->binId;
         return $this->returnInJson($this->binServ->destroy($ids));
     }
+    public function patch(Request $request): JsonResponse{
+        $request->validate([
+            'binId' => 'required|string',
+            'binName'=>'required|string',
+            'binCap'=>'required|integer'
+        ]);
+        $updtItem = BinDTO::fromRequest($request);
+        return $this->returnInJson($this->binServ->update($updtItem));
+    }
 
 }

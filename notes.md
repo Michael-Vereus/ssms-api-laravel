@@ -69,3 +69,7 @@ Patch 3.21.22.52 :
 
 Patch 3.22.08.01 : 
 - Fixed a bug inside delete function in Bin Repo
+
+Patch 3.22.13.00 : 
+- Added update function in Bin module
+- Reverted back to  stateless repository

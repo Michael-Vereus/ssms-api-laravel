@@ -51,9 +51,39 @@ class BinRepository extends BaseRepository{
             $err_msg
         );
     }
-    // public function updateUno(BinEntity $updtBin):array{
-
-    // }
+    public function updateUno(BinEntity $updtBin):array{
+        $status = $this->defaultStatus;
+        $err_msg = $this->defaultErr;
+        $id = $updtBin->binId;
+        $checkBin = BinEntity::find($id);
+        if($checkBin){
+            try {
+                $updtBin->exists = true;
+                $status = $updtBin->save();
+            } catch (Exception $e) {
+                $err_msg = $e->getMessage();
+            }
+        }
+        return $this->handleReturnArr(
+            $status,
+            $err_msg
+        );
+    }
+    public function queryByName(string $name): array{
+        $search_bin = [];
+        $err_msg = $this->defaultErr;
+        try {
+            $search_bin = BinEntity::whereRaw(
+                'LOWER(binName) LIKE ?',
+                ['%'. strtolower($name) . '%'])->get()->toArray();
+        } catch (Exception $e) {
+            $err_msg = $e->getMessage();
+        }
+        return $this->handleReturnArr(
+            $search_bin,
+            $err_msg
+        );
+    }
 }
 
 ?>

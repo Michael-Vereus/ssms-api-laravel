@@ -37,19 +37,31 @@ class BinService extends BaseService {
             $data['debug_err'],
         );
     }
-    public function createBinEntity(BinDTO $dto): BinEntity{
-        return BinEntity::makeNew(
-            $dto->binId,
-            $dto->binName,
-            $dto->binCap
-        );
-    }
     public function destroy(array $deleteIds): array{
         $data = $this->binRepo->deleteById($deleteIds);
 
         return $this->arrReturn(
             $data['result'],
             $data['debug_err']
+        );
+    }
+    public function update(BinDTO $dto): array{
+        $updtBin = $this->createBinEntity($dto);
+
+        $data = $this->binRepo->updateUno($updtBin);
+        return $this->arrReturn(
+            $data['result'],
+            $data['debug_err']
+        );
+    }
+    // public function findItemByName(){
+
+    // }
+    public function createBinEntity(BinDTO $dto): BinEntity{
+        return BinEntity::makeNew(
+            $dto->binId,
+            $dto->binName,
+            $dto->binCap
         );
     }
 }
