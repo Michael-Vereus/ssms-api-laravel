@@ -54,9 +54,15 @@ class BinService extends BaseService {
             $data['debug_err']
         );
     }
-    // public function findItemByName(){
+    public function findItemByName(string $item_name): array{
+        $data = $this->binRepo->queryByName($item_name);
 
-    // }
+        return $this->arrReturn(
+            true,
+            $data['debug_err'],
+            $data['result']
+        );
+    }
     public function createBinEntity(BinDTO $dto): BinEntity{
         return BinEntity::makeNew(
             $dto->binId,

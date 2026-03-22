@@ -73,3 +73,7 @@ Patch 3.22.08.01 :
 Patch 3.22.13.00 : 
 - Added update function in Bin module
 - Reverted back to  stateless repository
+
+Patch 3.22.23.30 : 
+- Added DTO Layer between repo and service
+- Added find By name in bin module

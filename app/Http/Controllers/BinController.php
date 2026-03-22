@@ -43,5 +43,8 @@ class BinController extends Controller {
         $updtItem = BinDTO::fromRequest($request);
         return $this->returnInJson($this->binServ->update($updtItem));
     }
+    public function search(string $bin_name): JsonResponse{
+        return $this->returnInJson($this->binServ->findItemByName($bin_name));
+    }
 
 }
