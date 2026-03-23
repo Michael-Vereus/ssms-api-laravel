@@ -7,15 +7,22 @@ readonly class ServiceResponse{
         public bool $status,
         public string $debug_msg,
         public string $debug_err,
-        public array $data
+        public ?array $data
     ) {}
     public static function fromRepoResponse(RepoResponse $repoResponse): self{
         return new self(
             status : $repoResponse->status,
-            debug_msg : $repoResponse->err_info,
+            debug_msg : ServiceResponse::getDebugMsg($repoResponse->result),
             debug_err : $repoResponse->err_info,
             data : $repoResponse->result
         );
+    }
+    private static function getDebugMsg(?array $data): string{
+        if(is_null($data)){return "Request doesnt return any data";}
+        elseif ($data === []) {
+            return "No Such stock EXIST in DB !!!";
+        }
+        return "Request Completed with data";
     }
 }
 ?>

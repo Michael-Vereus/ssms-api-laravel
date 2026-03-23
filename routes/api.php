@@ -3,20 +3,10 @@ declare(strict_types=1);
 
 use App\Http\Controllers\BinController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\TestController;
-use App\Models\BinEntity;
-use App\Models\ItemEntity;
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
-use function Laravel\Prompts\search;
 
-function test(): JsonResponse{
-    return response()->json([
-        "msg" => "API is Running"
-    ]);
-}
 
-Route::get('/test', function(){return test();});
 Route::get('/item/test',[ItemController::class, 'test']);
 Route::get('/item/all',[ItemController::class, 'fetchAll']);
 Route::get('/item/search/{item_name}',[ItemController::class, 'search']);
@@ -30,3 +20,29 @@ Route::get('bin/search/{bin_name}', [BinController::class, 'search']);
 Route::post('/bin/push',[BinController::class, 'push']);
 Route::put('bin/edit',[BinController::class, 'patch']);
 Route::delete('/bin/remove',[BinController::class,'remove']);
+
+Route::get('/stock/test',[StockController::class,'test']);
+Route::get('/stock/all',[StockController::class, 'fetchAll']);
+Route::get('stock/search/{stock_name}', [StockController::class, 'search']);
+Route::post('/stock/push',[StockController::class, 'push']);
+Route::put('stock/edit',[StockController::class, 'patch']);
+Route::delete('/stock/remove',[StockController::class,'remove']);
+
+// work in progress do not touch
+// $modules = [
+//     'item'  => ItemController::class,
+//     'bin'   => BinController::class,
+//     'stock' => StockController::class,
+// ];
+
+// // 2. Loop through and register everything at once
+// foreach ($modules as $prefix => $controller) {
+//     Route::prefix($prefix)->controller($controller)->group(function () use ($prefix) {
+//         Route::get('/test', 'test');
+//         Route::get('/all', 'index'); // Changed to index for standard
+//         Route::get("/search/{{$prefix}_name}", 'search');
+//         Route::post('/push', 'store');
+//         Route::put('/edit', 'update');
+//         Route::delete('/remove', 'destroy');
+//     });
+// }

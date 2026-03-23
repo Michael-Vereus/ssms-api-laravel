@@ -11,6 +11,9 @@ abstract class BaseRepository {
     protected bool $defaultStatus = false;
     protected bool $successStatus = true;
     protected string $defaultErr = "none";
+    public function __construct() {
+        $this->db = DB::connection()->getPdo();
+    }
     protected function handleExcept(Exception $e){
         return [
             "msg"=>"db_err", 

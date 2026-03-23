@@ -77,3 +77,15 @@ Patch 3.22.13.00 :
 Patch 3.22.23.30 : 
 - Added DTO Layer between repo and service
 - Added find By name in bin module
+
+Patch 3.23.11.34 : 
+- Finished All feature / function in Bin module
+- Started work on Stock module
+- Finished routing for stock module in api.php 
+- Tried to create a dynamix routing in api.php (check comment section), will continue it later.
+
+Patch 3.23.13.51 : 
+- Starting to use DTO as a way to return results from repo -> service -> controller. Implemented first in Stock then in Bin and Item module.
+- Fixed a bug where db variable in BaseRepository didnt have any pdo instances (forgot to getPdo)
+- Added fetchAll func in Stock module.
+- That's all for this afternoon, imma take a rest

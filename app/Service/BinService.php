@@ -14,11 +14,7 @@ class BinService extends BaseService {
     public function test(): array{
 
         $data = $this->binRepo->test();
-        return $this->arrReturn(
-            true,
-            $data['debug_err'],
-            $data['result']
-        );
+        return $data;
     }
     public function fetchAll(): array{
         $data = $this->binRepo->all();

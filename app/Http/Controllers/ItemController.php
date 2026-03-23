@@ -23,6 +23,7 @@ class ItemController extends Controller {
     public function push(Request $request): JsonResponse {
         //to check if this key exist in json 
         $request->validate([
+            'itemId' => 'prohibited',
             'itemPrice'   => 'required|integer',
             'itemName' => 'required|string',
         ]);
