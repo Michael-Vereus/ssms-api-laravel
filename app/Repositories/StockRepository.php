@@ -18,9 +18,18 @@ class StockRepository extends BaseRepository{
             $err = $e->getMessage();
             $stock = null;
         }
-        return new RepoResponse($status, $stock, $err);
+        return new RepoResponse($status,$err,$stock);
     }
-    public function insertUno(){}
+    public function insertUno(StockEntity $newStock): RepoResponse{
+        $status = $this->defaultErr;
+        $err_msg = $this->defaultStatus;
+        try {
+            $status = $newStock->save();
+        } catch (Exception $e) {
+            $err_msg = $e->getMessage();
+        }
+        return new RepoResponse($status, $err_msg);
+    }
     public function updateUno(){}
     public function queryByName(){}
     public function deleteById(){}

@@ -89,3 +89,7 @@ Patch 3.23.13.51 :
 - Fixed a bug where db variable in BaseRepository didnt have any pdo instances (forgot to getPdo)
 - Added fetchAll func in Stock module.
 - That's all for this afternoon, imma take a rest
+
+Patch 3.23.20.41 : 
+- Added insertion function in Stock Module
+- Created stock_log table to store history of changes made to stock rather than storing single time data.
