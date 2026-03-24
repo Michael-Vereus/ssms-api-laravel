@@ -12,7 +12,7 @@ class StockRepository extends BaseRepository{
         $err = $this->defaultErr;
         $stock = [];
         try {
-            $stock = StockEntity::all()->toArray();
+            $stock = StockEntity::fetchAll();
             $status = true;
         } catch (Exception $e) {
             $err = $e->getMessage();
@@ -30,7 +30,11 @@ class StockRepository extends BaseRepository{
         }
         return new RepoResponse($status, $err_msg);
     }
-    public function updateUno(){}
+    public function checkCurrentQuantity(string $itemId, string $binId): int{
+        return (int) StockEntity::where('binId', $binId)
+        ->where('itemId', $itemId)
+        ->sum('quantity');
+    }
     public function queryByName(){}
     public function deleteById(){}
 }

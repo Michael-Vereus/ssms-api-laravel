@@ -26,4 +26,18 @@ class StockEntity extends Model{
         $stockId = bin2hex(random_bytes(5));
         return $stockId;
     }
+    public static function fetchAll(): array{
+        return StockEntity::select(
+            'stock_log.itemId', 
+            'stock_log.binId', 
+            'items.itemName', 
+            'bins.binName'
+        )
+        ->selectRaw('SUM(stock_log.quantity) as total_quantity')
+        ->join('items', 'stock_log.itemId', '=', 'items.itemId')
+        ->join('bins', 'stock_log.binId', '=', 'bins.binId')
+        ->groupBy('stock_log.itemId', 'stock_log.binId', 'items.itemName', 'bins.binName')
+        ->get()
+        ->toArray();
+    }
 }

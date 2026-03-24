@@ -26,9 +26,21 @@ class StockController extends Controller{
             'quantity' => 'required|int'
         ]);
         $newStock = StockDTO::fromRequest($request);
-        return response()->json($this->stockServ->insertion($newStock));
+        // return response()->json($newStock);
+        return response()->json($this->stockServ->insertion($newStock),201);
     }
-    public function patch(){}
+    public function patch(Request $request){
+        $request->validate([
+            'stockId' => 'prohibited',
+            'binId' => 'required|string',
+            'itemId' => 'required|string',
+            'quantity' => 'required|int',
+            'newBinId' => 'optional|string',
+            'action' => 'required|in:IN,OUT,TRANSFER'
+        ]);
+        $updateStock = StockDTO::fromRequest($request);
+        return response()->json($this->stockServ->handleUpdateStock($updateStock));
+    }
     public function remove(){}
     public function search(){}
 }
