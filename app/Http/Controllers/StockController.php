@@ -46,7 +46,7 @@ class StockController extends Controller{
             'stockId' => 'prohibited',
             'binId' => 'required|string',
             'itemId' => 'required|string',
-            'quantity' => 'required|int'
+            'quantity' => 'prohibited'
         ]);
         $removeStock = StockDTO::fromRequest($request);
         return response()->json($this->stockServ->balanceOut($removeStock));

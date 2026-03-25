@@ -104,3 +104,9 @@ Patch 3.25.11.25 :
 - TL:DR, i created the concept to "soft delete" a stock by balance out it aka inserting minus transaction based on the total quantity.
 - But i happen to hit a bit of a hiccup on the road where SQLite LITERALLY LOCKS THE WHOLE DB WHEN WRITING, SO WHEN I INSERT A NEW TRANS WITH A NEW STOCK ID AND WHEN I INSERT TO ITS CHILDREN TABLE WITH THAT STOCK ID AS THE FOREIGN KEY. SQLITE SAYS FOREIGN KEY VIOLATION WHEN ITS LITERALLY SITTING THERE. 
 - Oh well, i ll try to think of another loophole for it anyway. Maybe add another logic or sumthin. In the mean time i stick with SQLite cuz im literally halfway through my project. Then after i finished it i move to SQL Server entirely
+
+Patch 3.25.17.25 : 
+- So ive been thinking lets just drop the foreign key in the out_stock_log table for now. Not because i dont value integrity but the damn system is fighting back at me. But instead when im restoring a transaction. 
+- If lets say the stockid in out_stock_log dont exist in stock_log table. Well the restoration wont happen. No imaginary restoration. But it will came at a cost the business logic will get longer but thats okat ill include that at the readme file explaining why the it took a longer route due to the limitation of SQLite itself.
+- Addeda custom helper function to create new stockentity from the array.
+- To sum it up ive made some progress on the "remove" logic on stock transaction. It will need some workaround such as added business logic on restoration part there wont be a "ghost restoration"

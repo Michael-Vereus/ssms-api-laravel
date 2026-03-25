@@ -79,13 +79,16 @@ class StockService extends BaseService{
     }
     public function balanceOut(StockDTO $outDTO): ServiceResponse{
         // $outStock =  self::createStockEntity($outDTO);
+        $arr = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
         $checkOut = outStock::logBalanceOut("b9a89dc3b5");
         $check = $this->stockRepo->insertStockIdOut($checkOut);
-        return ServiceResponse::debugMode([$checkOut, $check]);
+        $entity = StockService::newStockEntityFromArray($arr);
+        return ServiceResponse::debugMode([$checkOut, $check, $arr, $entity]);
         // return \DB::transaction(function() use ($outDTO){
         //     try {
-        //         $outStock =  self::createStockEntity($outDTO);
-        //         $this->emptyOldBin($outStock);
+        //         $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
+        //         $entity = StockService::newStockEntityFromArray($arr);
+        //         $this->emptyOldBin($stockExist);
         //         $stockId = $outStock->stockId;
         //         $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
         //         return ServiceResponse::fromRepoResponse($repo);
@@ -102,6 +105,14 @@ class StockService extends BaseService{
             $stockDTO->binId,
             $stockDTO->itemId,
             $stockDTO->quantity
+        );
+    }
+    private static function newStockEntityFromArray(array $arr): StockEntity{
+        return StockEntity::makeNew(
+            null,
+            $arr["binId"],
+            $arr["itemId"],
+            $arr["total_quantity"]
         );
     }
     // helper function to empty stock in old bin

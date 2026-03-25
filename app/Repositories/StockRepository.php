@@ -47,5 +47,20 @@ class StockRepository extends BaseRepository{
         }
         return new RepoResponse($status, $err_msg);
     }
+    public function findStockByBinAndItemId(string $binId, string $itemId): array{
+        $stock = [];
+        try {
+            $stock = StockEntity::select('binId', 'itemId')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->where('binId', $binId)
+            ->where('itemId', $itemId)
+            ->groupBy('binId', 'itemId')
+            ->first()
+            ->toArray();
+        } catch (Exception $e) {
+            $stock = [$e->getMessage()];
+        }
+        return $stock;
+    }
 }
 ?>
