@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTOs\RepoResponse;
+use App\Models\outStock;
 use App\Models\StockEntity;
 use Exception;
 
@@ -36,6 +37,15 @@ class StockRepository extends BaseRepository{
         ->sum('quantity');
     }
     public function queryByName(){}
-    public function deleteById(){}
+    public function insertStockIdOut(outStock $outStock): RepoResponse{
+        $status = $this->defaultErr;
+        $err_msg = $this->defaultStatus;
+        try {
+            $status = $outStock->save();
+        } catch (Exception $e) {
+            $err_msg = $e->getMessage();
+        }
+        return new RepoResponse($status, $err_msg);
+    }
 }
 ?>

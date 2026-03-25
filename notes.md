@@ -98,3 +98,9 @@ Patch 3.24.16.20 :
 - In this patch i only do one thing which is figuring how the heck am i gonna do an update on a stock transaction. Cuz i fucking confused on how this shit works. Then i remembered a something from my highschool days. Back in the day im really good with this bookkeeping keeping the journal entry, balance sheet and etc. Then i remembered that the same philosophy is we use debit and credit to track in and out and even changes or more fitting a ledger system. Turns out the transaction idea that i built is literally the same philosophy or logic as my old accouting lessons in high school. So i get to work on that immediately. 
 - I also modified the stockDTO a bit to accomodate the business logic. 
 - To sum it up this patch only brings the 'update' system or ledger transaction system in stock. It may seem small now, but trust me a few hours ago i was desperte on how figuring this out. So user now can edit the stock (increase and decrease quantity, change the binId or the bin where the item is currently in)
+
+Patch 3.25.11.25 : 
+- Fixed a bug in handleResponseUpdate
+- TL:DR, i created the concept to "soft delete" a stock by balance out it aka inserting minus transaction based on the total quantity.
+- But i happen to hit a bit of a hiccup on the road where SQLite LITERALLY LOCKS THE WHOLE DB WHEN WRITING, SO WHEN I INSERT A NEW TRANS WITH A NEW STOCK ID AND WHEN I INSERT TO ITS CHILDREN TABLE WITH THAT STOCK ID AS THE FOREIGN KEY. SQLITE SAYS FOREIGN KEY VIOLATION WHEN ITS LITERALLY SITTING THERE. 
+- Oh well, i ll try to think of another loophole for it anyway. Maybe add another logic or sumthin. In the mean time i stick with SQLite cuz im literally halfway through my project. Then after i finished it i move to SQL Server entirely

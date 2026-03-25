@@ -32,5 +32,13 @@ readonly class ServiceResponse{
             null
         );
     }
+    public static function debugMode(mixed $data): self{
+        return new self(
+            false,
+            "debug mode",
+            "-",
+            $data
+        );
+    }
 }
 ?>

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTOs\ServiceResponse;
 use App\DTOs\StockDTO;
+use App\Models\outStock;
 use App\Models\StockEntity;
 use App\Repositories\StockRepository;
 use Exception;
@@ -24,7 +25,7 @@ class StockService extends BaseService{
         return ServiceResponse::fromRepoResponse($data);
     }
     public function insertion(StockDTO $stockDTO): ServiceResponse{
-        $newStock = $this->createStockEntity($stockDTO);
+        $newStock = self::createStockEntity($stockDTO);
         $data = $this->stockRepo->insertUno($newStock);
         return ServiceResponse::fromRepoResponse($data);
     }
@@ -39,7 +40,7 @@ class StockService extends BaseService{
                     case 'OUT':
                         // We flip the quantity to negative for a removal
                         $negativeDTO = $updateStockDTO->withNegativeQuantity();
-                        $res = $this->stockRepo->insertUno($this->createStockEntity($negativeDTO));
+                        $res = $this->stockRepo->insertUno(self::createStockEntity($negativeDTO));
                         break;
 
                     case 'TRANSFER':
@@ -53,7 +54,8 @@ class StockService extends BaseService{
                             throw new Exception("Unable to move stock due to your !Current Stock : $curentStock is smaller than {$updateStockDTO->quantity}!");
                         }
                         // empty old bin 
-                        $this->emptyOldBin($updateStockDTO);
+                        $sourceStock = self::createStockEntity($updateStockDTO);
+                        $this->emptyOldBin($sourceStock);
                         // transfer it to the new bin
                         $destStock = StockEntity::makeNew(
                             null, // New ID
@@ -67,7 +69,7 @@ class StockService extends BaseService{
                     default:
                         throw new Exception("Unknown movement type, mate!");
                 }
-
+                if ($res instanceof ServiceResponse){return $res;}
                 return ServiceResponse::fromRepoResponse($res);
             } catch (Exception $e) {
                 $err = $e->getMessage();
@@ -75,7 +77,26 @@ class StockService extends BaseService{
             }
         });
     }
-    private function createStockEntity(StockDTO $stockDTO): StockEntity{
+    public function balanceOut(StockDTO $outDTO): ServiceResponse{
+        // $outStock =  self::createStockEntity($outDTO);
+        $checkOut = outStock::logBalanceOut("b9a89dc3b5");
+        $check = $this->stockRepo->insertStockIdOut($checkOut);
+        return ServiceResponse::debugMode([$checkOut, $check]);
+        // return \DB::transaction(function() use ($outDTO){
+        //     try {
+        //         $outStock =  self::createStockEntity($outDTO);
+        //         $this->emptyOldBin($outStock);
+        //         $stockId = $outStock->stockId;
+        //         $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
+        //         return ServiceResponse::fromRepoResponse($repo);
+        //     } catch (Exception $e) {
+        //         $err = $e->getMessage();
+        //         return ServiceResponse::catchException($err);
+        //     }
+        // });
+
+    }
+    private static function createStockEntity(StockDTO $stockDTO): StockEntity{
         return StockEntity::makeNew(
             $stockDTO->stockId,
             $stockDTO->binId,
@@ -83,10 +104,10 @@ class StockService extends BaseService{
             $stockDTO->quantity
         );
     }
-    private function emptyOldBin(StockDTO $updateStockDTO): void{
-        $sourceStock = $this->createStockEntity($updateStockDTO);
-        $sourceStock->quantity = -$updateStockDTO->quantity;
-        $this->stockRepo->insertUno($sourceStock);
+    // helper function to empty stock in old bin
+    private function emptyOldBin(StockEntity $oldStock): void{
+        $oldStock->quantity = -$oldStock->quantity;
+        $this->stockRepo->insertUno($oldStock);
     }
 }
 ?>
