@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StockEntity extends Model{
     protected $table = 'stock_log';
+    public $incrementing = 'false';
     protected $primaryKey = 'stockId';
     protected $keyType = 'string';
     protected $fillable = [
@@ -39,5 +40,8 @@ class StockEntity extends Model{
         ->groupBy('stock_log.itemId', 'stock_log.binId', 'items.itemName', 'bins.binName')
         ->get()
         ->toArray();
+    }
+    public function getIdForLog(): string{
+        return $this->stockId;
     }
 }

@@ -78,25 +78,19 @@ class StockService extends BaseService{
         });
     }
     public function balanceOut(StockDTO $outDTO): ServiceResponse{
-        // $outStock =  self::createStockEntity($outDTO);
-        $arr = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
-        $checkOut = outStock::logBalanceOut("b9a89dc3b5");
-        $check = $this->stockRepo->insertStockIdOut($checkOut);
-        $entity = StockService::newStockEntityFromArray($arr);
-        return ServiceResponse::debugMode([$checkOut, $check, $arr, $entity]);
-        // return \DB::transaction(function() use ($outDTO){
-        //     try {
-        //         $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
-        //         $entity = StockService::newStockEntityFromArray($arr);
-        //         $this->emptyOldBin($stockExist);
-        //         $stockId = $outStock->stockId;
-        //         $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
-        //         return ServiceResponse::fromRepoResponse($repo);
-        //     } catch (Exception $e) {
-        //         $err = $e->getMessage();
-        //         return ServiceResponse::catchException($err);
-        //     }
-        // });
+        return \DB::transaction(function() use ($outDTO){
+            try {
+            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
+            $entity = StockService::newStockEntityFromArray($stockExist);
+            $stockId = (string)$entity->getIdForLog();
+            $this->emptyOldBin($entity);
+            $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
+            return ServiceResponse::fromRepoResponse($repo);
+        } catch (Exception $e) {
+            $err = $e->getMessage();
+            return ServiceResponse::catchException($err);
+        }
+        });
 
     }
     private static function createStockEntity(StockDTO $stockDTO): StockEntity{

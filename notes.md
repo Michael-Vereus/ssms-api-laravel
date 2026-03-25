@@ -108,5 +108,12 @@ Patch 3.25.11.25 :
 Patch 3.25.17.25 : 
 - So ive been thinking lets just drop the foreign key in the out_stock_log table for now. Not because i dont value integrity but the damn system is fighting back at me. But instead when im restoring a transaction. 
 - If lets say the stockid in out_stock_log dont exist in stock_log table. Well the restoration wont happen. No imaginary restoration. But it will came at a cost the business logic will get longer but thats okat ill include that at the readme file explaining why the it took a longer route due to the limitation of SQLite itself.
-- Addeda custom helper function to create new stockentity from the array.
+- Added a custom helper function to create new stockentity from the array.
 - To sum it up ive made some progress on the "remove" logic on stock transaction. It will need some workaround such as added business logic on restoration part there wont be a "ghost restoration"
+
+Patch 3.25.21.09 : 
+- FINALLY FIXED THE DAMN BUG AND ITS ALL BECAUSE OF SQLITE LOCKING DOWN THE FILE WHEN WRITING. THE THING IS IM TRYING TO GET THE STOCKID FROM STOCK_LOG TABLE AFTER INSERTING A TRANSACTION. 
+- BUT THE THING IS SQLITE LOCKED THE FILE DURING WRITING, BUT LARAVEL KNEW WHICH ROWIS SO IT JS PASSES THAT ROWID INSTEAD THE STOCKID.
+- THE SOLUTION ??? JUST WRITE THE LINE TO GET THE STOCK ID AKA THE GETIDFORLOG BEFORE THE INSERTING A TRANSACTION TO STOCK_LOG TABLE. WHICH LITERALY SOLVE THE PROBLEM
+- IVE SPENT 1 HOUR OR MORE TRYING TO FIGURE OUT THIS SHIT, CUZ I KNOW THAT IVE DONE THINGS THE RIGHT WAY BUT I KNOW TH DB IS MESSING W ME BUT I JS DONT KNOW WHY. THEN I TRY THAT IT ALL FINALLY CLICKS.
+- THE CASUALTY OF FINDING THIS BUG IS MY HP LAPTOP OUTER SHELL WHICH LITERALLY CRACKS AFTER I SLAMMED MY HAND ON THE LAPTOP. THIS IS WHY I PREFER LENOVO, THAT THING FELL DOWN THE STAIRS AND NOT A SINGLE CRACK ONLY SCRACTCHES. BRUH.

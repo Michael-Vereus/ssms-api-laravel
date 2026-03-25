@@ -1,0 +1,27 @@
+[90m= [39m[
+    {#5387
+      +"[1mcid[22m": [35m0[39m,
+      +"[1mname[22m": "[32mstockId[39m",
+      +"[1mtype[22m": "[32mvarchar[39m",
+      +"[1mnotnull[22m": [35m1[39m,
+      +"[1mdflt_value[22m": [36mnull[39m,
+      +"[1mpk[22m": [35m1[39m,
+    },
+    {#5385
+      +"[1mcid[22m": [35m1[39m,
+      +"[1mname[22m": "[32mcreated_at[39m",
+      +"[1mtype[22m": "[32mdatetime[39m",
+      +"[1mnotnull[22m": [35m0[39m,
+      +"[1mdflt_value[22m": [36mnull[39m,
+      +"[1mpk[22m": [35m0[39m,
+    },
+    {#5384
+      +"[1mcid[22m": [35m2[39m,
+      +"[1mname[22m": "[32mupdated_at[39m",
+      +"[1mtype[22m": "[32mdatetime[39m",
+      +"[1mnotnull[22m": [35m0[39m,
+      +"[1mdflt_value[22m": [36mnull[39m,
+      +"[1mpk[22m": [35m0[39m,
+    },
+  ]
+
