@@ -42,6 +42,8 @@ class StockService extends BaseService{
                         $negativeDTO = $updateStockDTO->withNegativeQuantity();
                         $res = $this->stockRepo->insertUno(self::createStockEntity($negativeDTO));
                         break;
+                        // another note for myself need to add a check  
+                        // if the quantity is sufficient for 'OUT' transaction
 
                     case 'TRANSFER':
                         //get current stock from db
@@ -80,7 +82,8 @@ class StockService extends BaseService{
     public function balanceOut(StockDTO $outDTO): ServiceResponse{
         return \DB::transaction(function() use ($outDTO){
             try {
-            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
+            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, "oi");
+            if(is_null($stockExist)){throw new Exception("Stock doesnt exist");}
             $entity = StockService::newStockEntityFromArray($stockExist);
             $stockId = (string)$entity->getIdForLog();
             $this->emptyOldBin($entity);
@@ -92,6 +95,15 @@ class StockService extends BaseService{
         }
         });
 
+    }
+    public function restoreBalance(): ServiceResponse{
+        $check = $this->stockRepo->checkLastestTransaction("b81b46","722100ee");
+        $checkLastestOut = $this->stockRepo->checkLast("b81b46","722100ee");
+        $status = false;
+        if($check['total_quantity'] > 0 && $check['latest_created_at'] > $checkLastestOut['latest_out'] ){
+            $status = true; // this status means that restoration isnt needed because current stock isn't at ZERO 0
+        }
+        return ServiceResponse::debugMode([$check,$checkLastestOut, "Check completion" => $status]);
     }
     private static function createStockEntity(StockDTO $stockDTO): StockEntity{
         return StockEntity::makeNew(

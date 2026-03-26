@@ -24,12 +24,12 @@ readonly class ServiceResponse{
         }
         return "Request Completed with data";
     }
-    public static function catchException(string $err_msg){
+    public static function catchException(string $err_msg, ?array $data = null){
         return new self(
             true,
             ServiceResponse::getDebugMsg(null),
             $err_msg,
-            null
+            $data
         );
     }
     public static function debugMode(mixed $data): self{

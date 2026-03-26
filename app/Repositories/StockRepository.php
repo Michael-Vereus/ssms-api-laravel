@@ -47,7 +47,8 @@ class StockRepository extends BaseRepository{
         }
         return new RepoResponse($status, $err_msg);
     }
-    public function findStockByBinAndItemId(string $binId, string $itemId): array{
+    // to only be used as a helper functio !!! 
+    public function findStockByBinAndItemId(string $binId, string $itemId): array|null{
         $stock = [];
         try {
             $stock = StockEntity::select('binId', 'itemId')
@@ -56,11 +57,50 @@ class StockRepository extends BaseRepository{
             ->where('itemId', $itemId)
             ->groupBy('binId', 'itemId')
             ->first()
-            ->toArray();
+            ?->toArray();
         } catch (Exception $e) {
             $stock = [$e->getMessage()];
         }
         return $stock;
     }
+    public function checkLastestTransaction(string $binId,string $itemId){
+        $stock = [];
+        try {
+            $stock = StockEntity::select('binId', 'itemId')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->selectRaw('MAX(created_at) as latest_created_at')
+            ->where('binId', $binId)
+            ->where('itemId', $itemId)
+            ->groupBy('binId', 'itemId')
+            ->first()
+            ?->toArray();
+        } catch (Exception $e) {
+            $stock = [$e->getMessage()];
+        }
+        return $stock;
+    }
+    public function checkLast(string $binId, string $itemId){
+        $stock = [];
+        try {
+            $stock = outStock::select(
+                'stock_log.itemId',
+                'stock_log.binId',
+                'out_stock_log.stockId'
+            )
+            ->selectRaw('MAX(out_stock_log.created_at) as latest_out')
+            ->join('stock_log', 'out_stock_log.stockId', '=', 'stock_log.stockId')
+            ->where('stock_log.binId', $binId)
+            ->where('stock_log.itemId',$itemId)
+            ->where('stock_log.quantity',0)
+            ->groupBy('stock_log.binId','stock_log.itemId')
+            ->first()
+            ?->toArray();
+        } catch (\Throwable $e) {
+            $stock = [$e->getMessage()];
+        }
+        if (is_null($stock)){return [null];}
+        return $stock;
+    }
+
 }
 ?>

@@ -13,6 +13,7 @@ class StockController extends Controller{
         $this->stockServ = new StockService();
     }
     public function test(): JsonResponse{
+        return response()->json($this->stockServ->restoreBalance());
         return $this->returnInJson($this->stockServ->test());
     }
     public function fetchAll(): JsonResponse{

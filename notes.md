@@ -117,3 +117,9 @@ Patch 3.25.21.09 :
 - THE SOLUTION ??? JUST WRITE THE LINE TO GET THE STOCK ID AKA THE GETIDFORLOG BEFORE THE INSERTING A TRANSACTION TO STOCK_LOG TABLE. WHICH LITERALY SOLVE THE PROBLEM
 - IVE SPENT 1 HOUR OR MORE TRYING TO FIGURE OUT THIS SHIT, CUZ I KNOW THAT IVE DONE THINGS THE RIGHT WAY BUT I KNOW TH DB IS MESSING W ME BUT I JS DONT KNOW WHY. THEN I TRY THAT IT ALL FINALLY CLICKS.
 - THE CASUALTY OF FINDING THIS BUG IS MY HP LAPTOP OUTER SHELL WHICH LITERALLY CRACKS AFTER I SLAMMED MY HAND ON THE LAPTOP. THIS IS WHY I PREFER LENOVO, THAT THING FELL DOWN THE STAIRS AND NOT A SINGLE CRACK ONLY SCRACTCHES. BRUH.
+
+Patch 3.26.08.20 : 
+- Added a restoration feature, to restore a balance after a removal or balance out done.
+- Also added checking to see if the currrent quantity is zero or not and to see the latest transaction is newer compared to the latest out transaction
+- Still in development further update will be done on the next patch
+- Note to self the test function on StockController is used for debugging and testing only
