@@ -123,3 +123,7 @@ Patch 3.26.08.20 :
 - Also added checking to see if the currrent quantity is zero or not and to see the latest transaction is newer compared to the latest out transaction
 - Still in development further update will be done on the next patch
 - Note to self the test function on StockController is used for debugging and testing only
+
+Patch 3.26.20.48 : 
+- Finished the restoreBalance function aka a feature to restore a removed transaction and also added a checking to see if a transaction quantity isnt at zero and the latest trans created_at data is newer than the in the out_stock_log
+- Still acccessing the function through test function. Will make the restore balance on the next Patch

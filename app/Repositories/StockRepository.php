@@ -85,13 +85,13 @@ class StockRepository extends BaseRepository{
             $stock = outStock::select(
                 'stock_log.itemId',
                 'stock_log.binId',
-                'out_stock_log.stockId'
+                'out_stock_log.stockId',
+                'stock_log.quantity'
             )
             ->selectRaw('MAX(out_stock_log.created_at) as latest_out')
             ->join('stock_log', 'out_stock_log.stockId', '=', 'stock_log.stockId')
             ->where('stock_log.binId', $binId)
             ->where('stock_log.itemId',$itemId)
-            ->where('stock_log.quantity',0)
             ->groupBy('stock_log.binId','stock_log.itemId')
             ->first()
             ?->toArray();
@@ -101,6 +101,5 @@ class StockRepository extends BaseRepository{
         if (is_null($stock)){return [null];}
         return $stock;
     }
-
 }
 ?>

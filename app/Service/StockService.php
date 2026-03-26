@@ -82,7 +82,7 @@ class StockService extends BaseService{
     public function balanceOut(StockDTO $outDTO): ServiceResponse{
         return \DB::transaction(function() use ($outDTO){
             try {
-            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, "oi");
+            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
             if(is_null($stockExist)){throw new Exception("Stock doesnt exist");}
             $entity = StockService::newStockEntityFromArray($stockExist);
             $stockId = (string)$entity->getIdForLog();
@@ -100,10 +100,25 @@ class StockService extends BaseService{
         $check = $this->stockRepo->checkLastestTransaction("b81b46","722100ee");
         $checkLastestOut = $this->stockRepo->checkLast("b81b46","722100ee");
         $status = false;
+        // return ServiceResponse::debugMode([$checkLastestOut]);
         if($check['total_quantity'] > 0 && $check['latest_created_at'] > $checkLastestOut['latest_out'] ){
             $status = true; // this status means that restoration isnt needed because current stock isn't at ZERO 0
         }
-        return ServiceResponse::debugMode([$check,$checkLastestOut, "Check completion" => $status]);
+        try {
+            if($status){throw new Exception("Stock is already above zero no restoration required");}
+            $restoreBalance = StockEntity::makeNew(
+                null,
+                $checkLastestOut['binId'],
+                $checkLastestOut['itemId'],
+                $checkLastestOut['quantity'] + (-2)*$checkLastestOut['quantity']
+            );
+            $repoResp =  $this->stockRepo->insertUno($restoreBalance);
+            return ServiceResponse::fromRepoResponse($repoResp);    
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
+        }
+        
+        return ServiceResponse::debugMode([$repoResp,$check,$checkLastestOut, "Check completion" => $status]);
     }
     private static function createStockEntity(StockDTO $stockDTO): StockEntity{
         return StockEntity::makeNew(
