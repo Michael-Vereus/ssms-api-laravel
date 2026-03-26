@@ -127,3 +127,6 @@ Patch 3.26.08.20 :
 Patch 3.26.20.48 : 
 - Finished the restoreBalance function aka a feature to restore a removed transaction and also added a checking to see if a transaction quantity isnt at zero and the latest trans created_at data is newer than the in the out_stock_log
 - Still acccessing the function through test function. Will make the restore balance on the next Patch
+
+Smoll Patch 3.26.21.05 : 
+- Added some comments on the function flow on restoreBalance() -> StockService

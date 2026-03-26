@@ -97,15 +97,22 @@ class StockService extends BaseService{
 
     }
     public function restoreBalance(): ServiceResponse{
+        // get the latest transaction of latestTransaction (binId, itemId, stockId, quantity, created_at)
         $check = $this->stockRepo->checkLastestTransaction("b81b46","722100ee");
+        // get the latest out transaction (stockId and created_at)
         $checkLastestOut = $this->stockRepo->checkLast("b81b46","722100ee");
+        // set default status
         $status = false;
-        // return ServiceResponse::debugMode([$checkLastestOut]);
+        // return ServiceResponse::debugMode([$checkLastestOut]); --> debug mode ignore !
+        // check if the total quantity is bigger than zero 
+        // and checks if the latest transaction created_at date is newer than out_transaction created_at date
         if($check['total_quantity'] > 0 && $check['latest_created_at'] > $checkLastestOut['latest_out'] ){
             $status = true; // this status means that restoration isnt needed because current stock isn't at ZERO 0
         }
         try {
+            // if true then js throw an Exception
             if($status){throw new Exception("Stock is already above zero no restoration required");}
+            // if false then just procees to the restoration part
             $restoreBalance = StockEntity::makeNew(
                 null,
                 $checkLastestOut['binId'],
@@ -118,7 +125,7 @@ class StockService extends BaseService{
             return ServiceResponse::catchException($e->getMessage());
         }
         
-        return ServiceResponse::debugMode([$repoResp,$check,$checkLastestOut, "Check completion" => $status]);
+        // return ServiceResponse::debugMode([$repoResp,$check,$checkLastestOut, "Check completion" => $status]);
     }
     private static function createStockEntity(StockDTO $stockDTO): StockEntity{
         return StockEntity::makeNew(
