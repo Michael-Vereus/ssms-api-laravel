@@ -52,5 +52,14 @@ class StockController extends Controller{
         $removeStock = StockDTO::fromRequest($request);
         return response()->json($this->stockServ->balanceOut($removeStock));
     }
-    public function search(){}
+    public function restore(Request $request){
+        $request->validate([
+            'stockId' => 'prohibited',
+            'binId' => 'required|string',
+            'itemId' => 'required|string',
+            'quantity' => 'prohibited'
+        ]);
+        $restoreStock = StockDTO::fromRequest($request);
+        return response()->json($this->stockServ->restoreBalance($restoreStock));
+    }
 }

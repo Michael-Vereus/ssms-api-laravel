@@ -96,11 +96,11 @@ class StockService extends BaseService{
         });
 
     }
-    public function restoreBalance(): ServiceResponse{
+    public function restoreBalance(StockDTO $outDTO): ServiceResponse{
         // get the latest transaction of latestTransaction (binId, itemId, stockId, quantity, created_at)
-        $check = $this->stockRepo->checkLastestTransaction("b81b46","722100ee");
+        $check = $this->stockRepo->checkLastestTransaction($outDTO->binId,$outDTO->itemId);
         // get the latest out transaction (stockId and created_at)
-        $checkLastestOut = $this->stockRepo->checkLast("b81b46","722100ee");
+        $checkLastestOut = $this->stockRepo->checkLast($outDTO->binId, $outDTO->itemId);
         // set default status
         $status = false;
         // return ServiceResponse::debugMode([$checkLastestOut]); --> debug mode ignore !

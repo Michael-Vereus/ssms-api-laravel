@@ -130,3 +130,10 @@ Patch 3.26.20.48 :
 
 Smoll Patch 3.26.21.05 : 
 - Added some comments on the function flow on restoreBalance() -> StockService
+
+Refactor Patch 3.27.21.20 : 
+- Refactored Item Module to use Service and Repo Response 
+- Fixed some minor issue in stock controller
+- Still hasnt remove old codes only commented it 
+- Simplified routing in api
+- Modified returnInJson function to accept mixed type 

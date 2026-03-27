@@ -3,8 +3,10 @@
 namespace App\Service;
 
 use App\DTOs\ItemDTO;
+use App\DTOs\ServiceResponse;
 use App\Models\ItemEntity;
 use App\Repositories\ItemRepository;
+use Exception;
 
 class ItemService extends BaseService{
     protected ItemRepository $itemRepo ;
@@ -14,65 +16,78 @@ class ItemService extends BaseService{
     public function test(): array{
         return $this->itemRepo->test();
     }
-    public function getAll(): array{
+    public function getAll(): ServiceResponse{
         $data = $this->itemRepo->fetchAll();
 
-        return $this->arrReturn(
-            true,
-            $data['debug_err'],
-            $data['result']
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
     
-    public function findItemByName(string $item_name): array{
-        if(!$item_name || strlen($item_name) < 3){
-            return $this->arrReturn(
-                false,
-                "Enter at least 3 characters to search"
-            );
+    public function findItemByName(string $item_name): ServiceResponse{
+        // if(!$item_name || strlen($item_name) < 3){
+        //     return $this->arrReturn(
+        //         false,
+        //         "Enter at least 3 characters to search"
+        //     );
+        // }
+        try {
+            if(!$item_name || strlen($item_name) < 3){throw new Exception("Invalid item name please try again");}
+            $data = $this->itemRepo->queryByName($item_name);
+            return ServiceResponse::fromRepoResponse($data);
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
         }
-
-        $data = $this->itemRepo->queryByName($item_name);
-
-        return $this->arrReturn(
-            true,
-            $data['debug_err'],
-            $data['result'] 
-        );
     }
     
-    public function insertion(ItemDTO $dto): array{
-        if($dto->itemPrice <= 0){
-            return $this->arrReturn(
-                false,
-                "Invalid Item Price"
-            );
+    public function insertion(ItemDTO $dto): ServiceResponse{
+        // if($dto->itemPrice <= 0){
+        //     return $this->arrReturn(
+        //         false,
+        //         "Invalid Item Price"
+        //     );
+        // }
+        try {
+            if($dto->itemPrice <= 0){ throw new Exception("Invalid Item Price given !");}
+
+            $newItem = $this->createItemEntity($dto);
+            $data = $this->itemRepo->insertUno($newItem);['result'];
+            return ServiceResponse::fromRepoResponse($data);
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
         }
-        $newItem = $this->createItemEntity($dto);
-        $data = $this->itemRepo->insertUno($newItem);['result'];
-
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err']
-        );
-    }
-    public function update(ItemDTO $dto): array{
-
-        $uptItem = $this->createItemEntity($dto);
-        $data = $this->itemRepo->updateUno($uptItem);
         
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err']
-        );
+        // return $this->arrReturn(
+        //     $data['result'],
+        //     $data['debug_err']
+        // );
     }
-    public function destroy(array $deleteIds): array{
-        $data = $this->itemRepo->deleteById($deleteIds);
+    public function update(ItemDTO $dto): ServiceResponse{
 
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err']
-        );
+        try {
+            if ($dto->itemPrice <= 0 || strlen($dto->itemName) < 3) {throw new Exception("Invalid item price");}
+            $uptItem = $this->createItemEntity($dto);
+            $data = $this->itemRepo->updateUno($uptItem);
+            return ServiceResponse::fromRepoResponse($data);
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
+        }
+        
+        // return $this->arrReturn(
+        //     $data['result'],
+        //     $data['debug_err']
+        // );
+    }
+    public function destroy(array $deleteIds): ServiceResponse{
+        try {
+            $data = $this->itemRepo->deleteById($deleteIds);
+            return ServiceResponse::fromRepoResponse($data);
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
+        }
+
+        // return $this->arrReturn(
+        //     $data['result'],
+        //     $data['debug_err']
+        // );
     }
 
     // helper class

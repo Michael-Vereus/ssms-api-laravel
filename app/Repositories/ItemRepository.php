@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\DTOs\RepoResponse;
 use App\Models\ItemEntity;
 use Arr;
 use Exception;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\DB;
 
 class ItemRepository extends BaseRepository{
@@ -14,20 +16,23 @@ class ItemRepository extends BaseRepository{
         // to get pdo instance
         $this->db = DB::connection()->getPdo();
     }
-    public function fetchAll(): array {
+    public function fetchAll(): RepoResponse {
+        $status = $this->defaultStatus;
         $itemFetched = [];
         $err_msg = $this->defaultErr;
         try {
             $itemFetched = ItemEntity::all()->toArray();
+            $status = true;
         } catch (Exception $e) {
             $err_msg = $this->$e->getMessage();
         }
-        return $this->handleReturnArr(
-            $itemFetched,
-            $err_msg
-        );
+        // return $this->handleReturnArr(
+        //     $itemFetched,
+        //     $err_msg
+        // );
+        return new RepoResponse($status, $err_msg, $itemFetched);
     }
-    public function insertUno(ItemEntity $newItem): array {
+    public function insertUno(ItemEntity $newItem): RepoResponse {
         $status = $this->defaultStatus;
         $err_msg = $this->defaultErr;
         try {
@@ -35,13 +40,10 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
-        return $this->handleReturnArr(
-            $status,
-            $err_msg
-        );
+        return new RepoResponse($status,$err_msg);
     }
 
-    public function updateUno(ItemEntity $newItem): array{
+    public function updateUno(ItemEntity $newItem): RepoResponse{
         $status = $this->defaultStatus;
         $id = $newItem->itemId;
         $err_msg = $this->defaultErr;
@@ -54,12 +56,9 @@ class ItemRepository extends BaseRepository{
                 $err_msg = $e->getMessage();
             }
         }
-        return $this->handleReturnArr(
-            $status,
-            $err_msg
-        );
+        return new RepoResponse($status,$err_msg);
     }
-    public function deleteById(array $itemId): array{
+    public function deleteById(array $itemId): RepoResponse{
         $status = $this->defaultStatus;
         $err_msg = $this->defaultErr;
         try {
@@ -68,12 +67,10 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
-        return $this->handleReturnArr(
-            $status,
-            $err_msg
-        );
+        return new RepoResponse($status,$err_msg);
     }
-    public function queryByName(string $name): array{
+    public function queryByName(string $name): RepoResponse{
+        $status = $this->defaultStatus;
         $searchResult = [];
         $err_msg = $this->defaultErr;
         try {
@@ -81,13 +78,11 @@ class ItemRepository extends BaseRepository{
                 'LOWER(itemName) LIKE ?', 
                 ['%' . strtolower($name) . '%']
             )->get()->toArray();
+            $status = true;
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
-        return $this->handleReturnArr(
-            $searchResult,
-            $err_msg
-        );
+        return new RepoResponse($status, $err_msg,$searchResult);
     }
 }
 
