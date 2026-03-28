@@ -26,10 +26,7 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $this->$e->getMessage();
         }
-        // return $this->handleReturnArr(
-        //     $itemFetched,
-        //     $err_msg
-        // );
+
         return new RepoResponse($status, $err_msg, $itemFetched);
     }
     public function insertUno(ItemEntity $newItem): RepoResponse {
@@ -40,6 +37,7 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
+
         return new RepoResponse($status,$err_msg);
     }
 
@@ -56,6 +54,7 @@ class ItemRepository extends BaseRepository{
                 $err_msg = $e->getMessage();
             }
         }
+
         return new RepoResponse($status,$err_msg);
     }
     public function deleteById(array $itemId): RepoResponse{
@@ -67,6 +66,7 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
+
         return new RepoResponse($status,$err_msg);
     }
     public function queryByName(string $name): RepoResponse{
@@ -82,6 +82,7 @@ class ItemRepository extends BaseRepository{
         } catch (Exception $e) {
             $err_msg = $e->getMessage();
         }
+        
         return new RepoResponse($status, $err_msg,$searchResult);
     }
 }

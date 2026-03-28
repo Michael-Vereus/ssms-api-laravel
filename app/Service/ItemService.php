@@ -23,12 +23,7 @@ class ItemService extends BaseService{
     }
     
     public function findItemByName(string $item_name): ServiceResponse{
-        // if(!$item_name || strlen($item_name) < 3){
-        //     return $this->arrReturn(
-        //         false,
-        //         "Enter at least 3 characters to search"
-        //     );
-        // }
+
         try {
             if(!$item_name || strlen($item_name) < 3){throw new Exception("Invalid item name please try again");}
             $data = $this->itemRepo->queryByName($item_name);
@@ -39,12 +34,7 @@ class ItemService extends BaseService{
     }
     
     public function insertion(ItemDTO $dto): ServiceResponse{
-        // if($dto->itemPrice <= 0){
-        //     return $this->arrReturn(
-        //         false,
-        //         "Invalid Item Price"
-        //     );
-        // }
+
         try {
             if($dto->itemPrice <= 0){ throw new Exception("Invalid Item Price given !");}
 
@@ -54,11 +44,6 @@ class ItemService extends BaseService{
         } catch (Exception $e) {
             return ServiceResponse::catchException($e->getMessage());
         }
-        
-        // return $this->arrReturn(
-        //     $data['result'],
-        //     $data['debug_err']
-        // );
     }
     public function update(ItemDTO $dto): ServiceResponse{
 
@@ -70,11 +55,6 @@ class ItemService extends BaseService{
         } catch (Exception $e) {
             return ServiceResponse::catchException($e->getMessage());
         }
-        
-        // return $this->arrReturn(
-        //     $data['result'],
-        //     $data['debug_err']
-        // );
     }
     public function destroy(array $deleteIds): ServiceResponse{
         try {
@@ -83,21 +63,7 @@ class ItemService extends BaseService{
         } catch (Exception $e) {
             return ServiceResponse::catchException($e->getMessage());
         }
-
-        // return $this->arrReturn(
-        //     $data['result'],
-        //     $data['debug_err']
-        // );
     }
-
-    // helper class
-    // private function requestToArray(Request $request): array{
-    //     return $request->only([
-    //         'itemId' , 
-    //         'itemName', 
-    //         'itemPrice'
-    //     ]);
-    // }
     private function createItemEntity(ItemDTO $dto): ItemEntity{
         return ItemEntity::makeNew(
             $dto->itemId,

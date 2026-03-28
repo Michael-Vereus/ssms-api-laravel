@@ -137,3 +137,8 @@ Refactor Patch 3.27.21.20 :
 - Still hasnt remove old codes only commented it 
 - Simplified routing in api
 - Modified returnInJson function to accept mixed type 
+
+Refactor Patch 3.28.09.15 : 
+- Cleaned commented function (unused and old one) in Item Service
+- Cleaned a bit of comments in Item Repo
+- Refactored Bin Module to use Service and Repo Reponse

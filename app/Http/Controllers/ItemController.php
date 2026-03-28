@@ -48,41 +48,4 @@ class ItemController extends Controller {
     public function search(string $item_name): JsonResponse{
         return $this->returnInJson($this->itemServ->findItemByName($item_name));
     }
-    /*public function createItem(): JsonResponse{
-        return   
-    }
-    
-    private function toJsonArr(array $arr){
-        
-    }
-
-    /*
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */ /*
-    public function show(string $id)
-    {
-        //
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     */ /*
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */ /*
-    public function destroy(string $id)
-    {
-        //
-    } */
 }

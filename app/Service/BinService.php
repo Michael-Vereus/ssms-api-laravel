@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTOs\BinDTO;
+use App\DTOs\ServiceResponse;
 use App\Models\BinEntity;
 use App\Repositories\BinRepository;
 
@@ -16,50 +17,33 @@ class BinService extends BaseService {
         $data = $this->binRepo->test();
         return $data;
     }
-    public function fetchAll(): array{
+    public function fetchAll(): ServiceResponse{
         $data = $this->binRepo->all();
-        return $this->arrReturn(
-            true,
-            $data['debug_err'],
-            $data['result']
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
-    public function insertion(BinDTO $binDTO): array{
+    public function insertion(BinDTO $binDTO): ServiceResponse{
         $newBin = $this->createBinEntity($binDTO);
 
         $data = $this->binRepo->insertUno($newBin);
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err'],
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
-    public function destroy(array $deleteIds): array{
+    public function destroy(array $deleteIds): ServiceResponse{
         $data = $this->binRepo->deleteById($deleteIds);
 
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err']
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
-    public function update(BinDTO $dto): array{
+    public function update(BinDTO $dto): ServiceResponse{
         $updtBin = $this->createBinEntity($dto);
 
         $data = $this->binRepo->updateUno($updtBin);
-        return $this->arrReturn(
-            $data['result'],
-            $data['debug_err']
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
-    public function findItemByName(string $item_name): array{
+    public function findItemByName(string $item_name): ServiceResponse{
         $data = $this->binRepo->queryByName($item_name);
 
-        return $this->arrReturn(
-            true,
-            $data['debug_err'],
-            $data['result']
-        );
+        return ServiceResponse::fromRepoResponse($data);
     }
-    public function createBinEntity(BinDTO $dto): BinEntity{
+    private function createBinEntity(BinDTO $dto): BinEntity{
         return BinEntity::makeNew(
             $dto->binId,
             $dto->binName,
