@@ -145,3 +145,6 @@ Refactor Patch 3.28.09.15 :
 
 Smoll Patch 3.28.21.24 : 
 - Used function to returnInJson as to return in StockController
+
+Patch 3.29.00.27 : 
+- Edited readme.md file
