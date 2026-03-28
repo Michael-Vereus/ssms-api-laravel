@@ -13,7 +13,6 @@ class StockController extends Controller{
         $this->stockServ = new StockService();
     }
     public function test(): JsonResponse{
-        return response()->json($this->stockServ->restoreBalance());
         return $this->returnInJson($this->stockServ->test());
     }
     public function fetchAll(): JsonResponse{
@@ -40,7 +39,7 @@ class StockController extends Controller{
             'action' => 'required|in:IN,OUT,TRANSFER'
         ]);
         $updateStock = StockDTO::fromRequest($request);
-        return response()->json($this->stockServ->handleUpdateStock($updateStock));
+        return $this->returnInJson($this->stockServ->handleUpdateStock($updateStock));
     }
     public function remove(Request $request){
         $request->validate([
@@ -50,7 +49,7 @@ class StockController extends Controller{
             'quantity' => 'prohibited'
         ]);
         $removeStock = StockDTO::fromRequest($request);
-        return response()->json($this->stockServ->balanceOut($removeStock));
+        return $this->returnInJson($this->stockServ->balanceOut($removeStock));
     }
     public function restore(Request $request){
         $request->validate([
@@ -60,6 +59,6 @@ class StockController extends Controller{
             'quantity' => 'prohibited'
         ]);
         $restoreStock = StockDTO::fromRequest($request);
-        return response()->json($this->stockServ->restoreBalance($restoreStock));
+        return $this->returnInJson($this->stockServ->restoreBalance($restoreStock));
     }
 }

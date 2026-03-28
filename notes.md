@@ -142,3 +142,6 @@ Refactor Patch 3.28.09.15 :
 - Cleaned commented function (unused and old one) in Item Service
 - Cleaned a bit of comments in Item Repo
 - Refactored Bin Module to use Service and Repo Reponse
+
+Smoll Patch 3.28.21.24 : 
+- Used function to returnInJson as to return in StockController
