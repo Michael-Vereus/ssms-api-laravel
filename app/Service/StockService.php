@@ -25,9 +25,18 @@ class StockService extends BaseService{
         return ServiceResponse::fromRepoResponse($data);
     }
     public function insertion(StockDTO $stockDTO): ServiceResponse{
-        $newStock = self::createStockEntity($stockDTO);
-        $data = $this->stockRepo->insertUno($newStock);
-        return ServiceResponse::fromRepoResponse($data);
+        
+        try {
+            // return ServiceResponse::debugMode([$this->stockRepo->getBinCapacity($stockDTO->binId)]);
+            $totalQuantity = $this->calculateTotalQuantity($stockDTO);
+            (int) $maxCap = $this->stockRepo->getBinCapacity($stockDTO->binId);
+            if ($totalQuantity > $maxCap){throw new Exception("Insufficient Bin Capacity !");}
+            $newStock = self::createStockEntity($stockDTO);
+            $data = $this->stockRepo->insertUno($newStock);
+            return ServiceResponse::fromRepoResponse($data);
+        } catch (Exception $e) {
+            return ServiceResponse::catchException($e->getMessage());
+        }
     }
     public function handleUpdateStock(StockDTO $updateStockDTO): ServiceResponse{
         return \DB::transaction(function() use ($updateStockDTO){
@@ -82,17 +91,17 @@ class StockService extends BaseService{
     public function balanceOut(StockDTO $outDTO): ServiceResponse{
         return \DB::transaction(function() use ($outDTO){
             try {
-            $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
-            if(is_null($stockExist)){throw new Exception("Stock doesnt exist");}
-            $entity = StockService::newStockEntityFromArray($stockExist);
-            $stockId = (string)$entity->getIdForLog();
-            $this->emptyOldBin($entity);
-            $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
-            return ServiceResponse::fromRepoResponse($repo);
-        } catch (Exception $e) {
-            $err = $e->getMessage();
-            return ServiceResponse::catchException($err);
-        }
+                $stockExist = $this->stockRepo->findStockByBinAndItemId($outDTO->binId, $outDTO->itemId);
+                if(is_null($stockExist)){throw new Exception("Stock doesnt exist");}
+                $entity = StockService::newStockEntityFromArray($stockExist);
+                $stockId = (string)$entity->getIdForLog();
+                $this->emptyOldBin($entity);
+                $repo = $this->stockRepo->insertStockIdOut(outStock::logBalanceOut($stockId));
+                return ServiceResponse::fromRepoResponse($repo);
+            } catch (Exception $e) {
+                $err = $e->getMessage();
+                return ServiceResponse::catchException($err);
+            }
         });
 
     }
@@ -147,6 +156,12 @@ class StockService extends BaseService{
     private function emptyOldBin(StockEntity $oldStock): void{
         $oldStock->quantity = -$oldStock->quantity;
         $this->stockRepo->insertUno($oldStock);
+    }
+    // another helper function to calculate the current totalQuantity + request quantity
+    private function calculateTotalQuantity(StockDTO $dto): int{
+        $latestQuantity = $this->stockRepo->checkLastestTransaction($dto->binId,$dto->itemId);
+        $totalQuantity = $latestQuantity['total_quantity'] + $dto->quantity;
+        return $totalQuantity;
     }
 }
 ?>

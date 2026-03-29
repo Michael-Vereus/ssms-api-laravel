@@ -148,3 +148,8 @@ Smoll Patch 3.28.21.24 :
 
 Patch 3.29.00.27 : 
 - Edited readme.md file
+
+Patch 3.29.09.27 : 
+- Added a condition in inserting stock where it must be within the binCapacity. Else ? it would thrown an Exception
+- Added getBinCapacity in StockRepository
+- Added Helper function to calculate total quantity

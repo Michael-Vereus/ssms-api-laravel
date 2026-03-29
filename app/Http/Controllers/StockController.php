@@ -16,7 +16,7 @@ class StockController extends Controller{
         return $this->returnInJson($this->stockServ->test());
     }
     public function fetchAll(): JsonResponse{
-        return response()->json($this->stockServ->getAll());
+        return $this->returnInJson($this->stockServ->getAll());
     }
     public function push(Request $request){
         $request->validate([
@@ -26,8 +26,8 @@ class StockController extends Controller{
             'quantity' => 'required|int'
         ]);
         $newStock = StockDTO::fromRequest($request);
-        // return response()->json($newStock);
-        return response()->json($this->stockServ->insertion($newStock),201);
+        // return $this->returnInJson($newStock);
+        return $this->returnInJson($this->stockServ->insertion($newStock));
     }
     public function patch(Request $request){
         $request->validate([

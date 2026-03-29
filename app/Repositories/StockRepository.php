@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTOs\RepoResponse;
+use App\Models\BinEntity;
 use App\Models\outStock;
 use App\Models\StockEntity;
 use Exception;
@@ -95,11 +96,19 @@ class StockRepository extends BaseRepository{
             ->groupBy('stock_log.binId','stock_log.itemId')
             ->first()
             ?->toArray();
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
             $stock = [$e->getMessage()];
         }
         if (is_null($stock)){return [null];}
         return $stock;
+    }
+    public function getBinCapacity(string $binId): mixed{
+        try {
+            $quantity = BinEntity::where('binId', $binId)->value('binCap');
+        } catch (Exception $e) {
+            $quantity = $e->getMessage();
+        }
+        return $quantity;
     }
 }
 ?>
